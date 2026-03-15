@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Swastik's World 🌿</title>
+<link href="https://fonts.googleapis.com/css2?family=Righteous&family=Nunito:wght@400;600;700;800;900&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet"/>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Nunito',sans-serif;background:#040d08;color:#e8fff2;overflow-x:hidden;min-height:100vh}
+::-webkit-scrollbar{width:5px}
+::-webkit-scrollbar-track{background:#040d08}
+::-webkit-scrollbar-thumb{background:linear-gradient(#22c55e,#86efac);border-radius:99px}
+.bg-canvas{position:fixed;inset:0;z-index:0;pointer-events:none;background:radial-gradient(ellipse 80% 60% at 10% 10%,rgba(16,185,129,0.18) 0%,transparent 60%),radial-gradient(ellipse 60% 50% at 90% 80%,rgba(132,204,22,0.13) 0%,transparent 55%),radial-gradient(ellipse 50% 40% at 60% 40%,rgba(6,95,70,0.12) 0%,transparent 50%),#040d08}
+.grid-lines{position:fixed;inset:0;z-index:0;pointer-events:none;background-image:linear-gradient(rgba(34,197,94,0.04) 1px,transparent 1px),linear-gradient(90deg,rgba(34,197,94,0.04) 1px,transparent 1px);background-size:70px 70px}
+.nav{position:fixed;top:0;left:0;right:0;z-index:900;height:64px;display:flex;align-items:center;justify-content:space-between;padding:0 4rem;background:rgba(4,13,8,0.75);backdrop-filter:blur(24px);border-bottom:1px solid rgba(34,197,94,0.12);box-shadow:0 1px 40px rgba(0,0,0,0.5)}
+.nav-logo{font-family:'Righteous',cursive;font-size:1.5rem;background:linear-gradient(135deg,#4ade80,#a3e635,#34d399);-webkit-background-clip:text;-webkit-text-fill-color:transparent;letter-spacing:3px;filter:drop-shadow(0 0 20px rgba(74,222,128,0.5))}
+.nav-links{display:flex;gap:2.5rem;align-items:center}
+.nav-link{font-size:0.82rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:rgba(167,243,208,0.6);text-decoration:none;cursor:pointer;transition:color 0.25s;position:relative;padding:4px 0}
+.nav-link::after{content:'';position:absolute;bottom:-2px;left:0;width:0;height:2px;background:linear-gradient(90deg,#4ade80,#a3e635);border-radius:2px;transition:width 0.3s cubic-bezier(.4,0,.2,1)}
+.nav-link:hover,.nav-link.active{color:#86efac}
+.nav-link:hover::after,.nav-link.active::after{width:100%}
+.hero{position:relative;z-index:2;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:80px 4rem 4rem;gap:6rem}
+.hero-left{flex:1;max-width:620px}
+.hero-badge{display:inline-flex;align-items:center;gap:10px;padding:8px 22px;border-radius:999px;border:1px solid rgba(163,230,53,0.35);background:rgba(163,230,53,0.07);backdrop-filter:blur(12px);font-size:0.75rem;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;color:#a3e635;margin-bottom:2rem;box-shadow:0 0 24px rgba(163,230,53,0.12),inset 0 1px 0 rgba(255,255,255,0.08)}
+.badge-dot{width:8px;height:8px;border-radius:50%;background:#a3e635;animation:dotPulse 1.6s ease-in-out infinite;box-shadow:0 0 12px #a3e635;display:inline-block}
+@keyframes dotPulse{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(0.6);opacity:0.4}}
+.hero-title{font-family:'Righteous',cursive;font-size:clamp(5rem,9vw,8.5rem);line-height:0.88;letter-spacing:-3px;background:linear-gradient(150deg,#d1fae5 0%,#4ade80 25%,#a3e635 55%,#34d399 80%,#6ee7b7 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;filter:drop-shadow(0 0 40px rgba(74,222,128,0.35));margin-bottom:1.2rem}
+.hero-tagline{font-size:1.1rem;font-weight:600;letter-spacing:3px;text-transform:uppercase;color:rgba(134,239,172,0.65);margin-bottom:1.5rem}
+.hero-bio{font-size:1.05rem;color:rgba(167,243,208,0.6);line-height:1.9;max-width:500px;margin-bottom:2.5rem}
+.hero-chips{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:3rem}
+.hero-chip{display:flex;align-items:center;gap:8px;padding:9px 18px;border-radius:999px;background:rgba(6,95,70,0.35);border:1px solid rgba(52,211,153,0.2);backdrop-filter:blur(8px);font-size:0.85rem;font-weight:700;color:rgba(167,243,208,0.8);transition:all 0.28s cubic-bezier(.4,0,.2,1);box-shadow:0 4px 16px rgba(0,0,0,0.25),inset 0 1px 0 rgba(255,255,255,0.06);cursor:default}
+.hero-chip:hover{background:rgba(74,222,128,0.18);border-color:rgba(74,222,128,0.45);color:#d1fae5;transform:translateY(-3px) scale(1.05);box-shadow:0 10px 28px rgba(74,222,128,0.2),inset 0 1px 0 rgba(255,255,255,0.1)}
+.hero-right{flex-shrink:0;width:340px;display:flex;flex-direction:column;gap:1.2rem}
+.profile-card{background:linear-gradient(145deg,rgba(6,95,70,0.4),rgba(4,13,8,0.6));border:1px solid rgba(74,222,128,0.2);border-radius:28px;padding:2.2rem;backdrop-filter:blur(20px);box-shadow:0 20px 60px rgba(0,0,0,0.5),0 0 60px rgba(74,222,128,0.06),inset 0 1px 0 rgba(255,255,255,0.08);position:relative;overflow:hidden}
+.profile-card::before{content:'';position:absolute;inset:0;background:linear-gradient(145deg,rgba(74,222,128,0.06),transparent 60%);pointer-events:none;border-radius:inherit}
+.avatar-wrap{width:90px;height:90px;border-radius:50%;padding:2.5px;background:linear-gradient(135deg,#4ade80,#a3e635,#34d399);margin:0 auto 1.2rem;box-shadow:0 0 30px rgba(74,222,128,0.45),0 0 60px rgba(74,222,128,0.15);animation:hueShift 6s linear infinite}
+@keyframes hueShift{to{filter:hue-rotate(40deg)}}
+.avatar-inner{width:100%;height:100%;border-radius:50%;background:#040d08;display:flex;align-items:center;justify-content:center;font-size:2.8rem}
+.profile-name{font-family:'Righteous',cursive;font-size:1.8rem;text-align:center;background:linear-gradient(90deg,#4ade80,#a3e635);-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:0.3rem}
+.profile-school{text-align:center;font-size:0.78rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:rgba(134,239,172,0.5);margin-bottom:1.4rem}
+.profile-stats{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.pstat{background:rgba(4,13,8,0.6);border:1px solid rgba(52,211,153,0.12);border-radius:14px;padding:0.9rem;text-align:center}
+.pstat-val{font-family:'Righteous',cursive;font-size:1.5rem;background:linear-gradient(135deg,#4ade80,#a3e635);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.pstat-label{font-size:0.7rem;color:rgba(134,239,172,0.45);font-weight:700;letter-spacing:1.5px;text-transform:uppercase;margin-top:2px}
+.mini-card{background:linear-gradient(135deg,rgba(6,95,70,0.35),rgba(4,13,8,0.55));border:1px solid rgba(74,222,128,0.15);border-radius:18px;padding:1.2rem 1.5rem;backdrop-filter:blur(16px);display:flex;align-items:center;gap:14px;box-shadow:0 8px 30px rgba(0,0,0,0.35),inset 0 1px 0 rgba(255,255,255,0.06);transition:all 0.3s}
+.mini-card:hover{border-color:rgba(74,222,128,0.38);transform:translateX(6px);box-shadow:0 12px 40px rgba(74,222,128,0.15)}
+.mini-icon{font-size:1.8rem;width:46px;height:46px;border-radius:12px;background:linear-gradient(135deg,rgba(6,95,70,0.6),rgba(4,120,87,0.4));border:1px solid rgba(74,222,128,0.2);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.mini-label{font-size:0.7rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:rgba(134,239,172,0.45);margin-bottom:3px;font-family:'Space Mono',monospace}
+.mini-val{font-size:0.95rem;font-weight:800;color:#d1fae5}
+.section{position:relative;z-index:2;padding:6rem 4rem}
+.section-inner{max-width:1200px;margin:0 auto}
+.section-eyebrow{font-family:'Space Mono',monospace;font-size:0.68rem;letter-spacing:4px;text-transform:uppercase;color:#a3e635;opacity:0.8;margin-bottom:0.5rem}
+.section-heading{font-family:'Righteous',cursive;font-size:clamp(2rem,4vw,3.2rem);background:linear-gradient(135deg,#f0fdf4,#86efac);-webkit-background-clip:text;-webkit-text-fill-color:transparent;line-height:1.1;margin-bottom:0.8rem}
+.glow-bar{width:64px;height:3px;border-radius:2px;background:linear-gradient(90deg,#4ade80,#a3e635);box-shadow:0 0 14px rgba(163,230,53,0.5);margin-bottom:3rem}
+.gcard{background:linear-gradient(145deg,rgba(6,95,70,0.28),rgba(4,13,8,0.5));border:1px solid rgba(74,222,128,0.15);border-radius:24px;backdrop-filter:blur(20px);box-shadow:0 12px 48px rgba(0,0,0,0.4),inset 0 1px 0 rgba(255,255,255,0.07);position:relative;overflow:hidden;transition:all 0.35s cubic-bezier(.4,0,.2,1)}
+.gcard::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(74,222,128,0.06),transparent 55%);pointer-events:none;border-radius:inherit}
+.gcard:hover{transform:translateY(-8px) scale(1.015);border-color:rgba(74,222,128,0.38);box-shadow:0 24px 70px rgba(0,0,0,0.5),0 0 50px rgba(74,222,128,0.14),inset 0 1px 0 rgba(255,255,255,0.1)}
+.interests-grid,.subjects-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem}
+.int-card{padding:2.2rem}
+.int-icon-wrap{width:76px;height:76px;border-radius:20px;background:linear-gradient(135deg,rgba(6,95,70,0.6),rgba(4,120,87,0.35));border:1px solid rgba(74,222,128,0.18);display:flex;align-items:center;justify-content:center;font-size:2.8rem;margin-bottom:1.2rem;box-shadow:0 8px 24px rgba(0,0,0,0.3);transition:transform 0.3s}
+.gcard:hover .int-icon-wrap{transform:scale(1.12) rotate(-6deg)}
+.int-name{font-family:'Righteous',cursive;font-size:1.4rem;background:linear-gradient(135deg,#f0fdf4,#86efac);-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:0.6rem}
+.int-desc{font-size:0.88rem;color:rgba(167,243,208,0.55);line-height:1.8;margin-bottom:1.4rem}
+.bar-head{display:flex;justify-content:space-between;font-size:0.7rem;font-family:'Space Mono',monospace;color:#a3e635;margin-bottom:6px;opacity:0.8}
+.bar-track{height:6px;background:rgba(255,255,255,0.06);border-radius:999px;overflow:hidden}
+.bar-fill{height:100%;border-radius:999px;background:linear-gradient(90deg,#22c55e,#a3e635);box-shadow:0 0 10px rgba(163,230,53,0.45);animation:growBar 1.4s cubic-bezier(.4,0,.2,1) both}
+@keyframes growBar{from{width:0!important}to{}}
+.sub-card{padding:2.5rem 2rem;text-align:center}
+.sub-emoji{font-size:3.2rem;display:block;margin-bottom:1rem;animation:floatBob 3s ease-in-out infinite}
+@keyframes floatBob{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+.sub-name{font-family:'Righteous',cursive;font-size:1.35rem;background:linear-gradient(135deg,#86efac,#a3e635);-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:0.6rem}
+.sub-desc{font-size:0.86rem;color:rgba(167,243,208,0.5);line-height:1.8;margin-bottom:1.2rem}
+.sub-badge{display:inline-block;padding:5px 16px;border-radius:999px;background:rgba(74,222,128,0.1);border:1px solid rgba(74,222,128,0.22);font-size:0.7rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:#4ade80;margin-bottom:1rem}
+.stars{display:flex;justify-content:center;gap:4px}
+.star{font-size:1.1rem;color:#fbbf24;animation:twinkle 2s ease-in-out infinite}
+@keyframes twinkle{0%,100%{opacity:1}50%{opacity:0.35}}
+.school-banner{padding:3.5rem 4rem;position:relative;overflow:hidden}
+.school-banner::after{content:'🏫';position:absolute;right:3rem;bottom:-0.5rem;font-size:9rem;opacity:0.06;line-height:1;pointer-events:none}
+.school-eyebrow{font-family:'Space Mono',monospace;font-size:0.68rem;letter-spacing:4px;text-transform:uppercase;color:#a3e635;opacity:0.8;margin-bottom:0.8rem}
+.school-name-big{font-family:'Righteous',cursive;font-size:clamp(2rem,4vw,3.5rem);background:linear-gradient(135deg,#d1fae5,#4ade80,#a3e635);-webkit-background-clip:text;-webkit-text-fill-color:transparent;line-height:1.1;margin-bottom:1rem}
+.school-desc{color:rgba(167,243,208,0.55);max-width:520px;line-height:1.9;font-size:0.95rem;margin-bottom:2rem}
+.school-pills{display:flex;flex-wrap:wrap;gap:12px}
+.spill{display:flex;align-items:center;gap:8px;padding:10px 22px;border-radius:999px;background:rgba(4,13,8,0.55);border:1px solid rgba(74,222,128,0.18);font-weight:700;font-size:0.88rem;color:rgba(167,243,208,0.75);transition:all 0.25s;cursor:default}
+.spill:hover{border-color:rgba(74,222,128,0.4);color:#d1fae5;transform:translateY(-2px)}
+.family-center{display:flex;justify-content:center}
+.fam-card{padding:3.5rem 4rem;text-align:center;max-width:520px;width:100%}
+.fam-heart{font-size:3.5rem;animation:heartbeat 1.6s ease-in-out infinite;display:block;margin-bottom:1rem}
+@keyframes heartbeat{0%,100%{transform:scale(1)}50%{transform:scale(1.18)}}
+.fam-number{font-family:'Righteous',cursive;font-size:6rem;line-height:1;background:linear-gradient(135deg,#f87171,#fbbf24);-webkit-background-clip:text;-webkit-text-fill-color:transparent;filter:drop-shadow(0 0 24px rgba(248,113,113,0.4))}
+.fam-label{font-size:1.1rem;font-weight:800;color:#d1fae5;margin-top:0.4rem}
+.fam-desc{color:rgba(167,243,208,0.45);font-size:0.9rem;margin-top:1.2rem;line-height:1.9;max-width:340px;margin-left:auto;margin-right:auto}
+.footer{position:relative;z-index:2;border-top:1px solid rgba(74,222,128,0.1);background:rgba(4,13,8,0.7);backdrop-filter:blur(20px);padding:3rem 4rem;text-align:center}
+.footer-logo{font-family:'Righteous',cursive;font-size:2.2rem;background:linear-gradient(135deg,#4ade80,#a3e635);-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:0.4rem}
+.footer-sub{font-size:0.78rem;color:rgba(134,239,172,0.3);letter-spacing:2px;margin-bottom:0.8rem}
+.footer-made{font-size:0.72rem;color:rgba(134,239,172,0.18)}
+.dino-btn{position:fixed;bottom:2rem;right:2rem;z-index:800;font-size:2.2rem;cursor:pointer;animation:dinoFloat 3.5s ease-in-out infinite;filter:drop-shadow(0 4px 20px rgba(0,0,0,0.4));border:none;background:none}
+.dino-btn:hover{animation-play-state:paused;transform:scale(1.3) rotate(-12deg)}
+@keyframes dinoFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-16px)}}
+.toast{position:fixed;bottom:6.5rem;right:2rem;background:linear-gradient(135deg,#065f46,#14532d);border:1px solid rgba(74,222,128,0.35);color:#d1fae5;padding:10px 20px;border-radius:14px;font-size:0.88rem;font-weight:700;z-index:9999;box-shadow:0 8px 28px rgba(0,0,0,0.4);animation:toastIn 0.3s ease both}
+@keyframes toastIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+.divider{height:1px;background:linear-gradient(90deg,transparent,rgba(74,222,128,0.12),transparent);margin:0 4rem}
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script>
+const {useState,useEffect,useRef} = React;
+function App(){
+  const [toast,setToast]=useState('');
+  const [activeSection,setActiveSection]=useState('hero');
+  const roars=['🦖 RAWR! Dino fan here!','🦕 Swastik loves dinos!','⚡ Cretaceous mode ON!','🌿 Jurassic energy!','🦴 Dino nerd for life!'];
+  const ri=useRef(0);
+  const showToast=(msg)=>{setToast(msg);setTimeout(()=>setToast(''),2000)};
+  const dinoClick=()=>showToast(roars[ri.current++%roars.length]);
+  useEffect(()=>{
+    const onScroll=()=>{
+      const ids=['hero','interests','subjects','school','family'];
+      let cur='hero';
+      ids.forEach(id=>{const el=document.getElementById(id);if(el&&window.scrollY>=el.offsetTop-200)cur=id;});
+      setActiveSection(cur);
+    };
+    window.addEventListener('scroll',onScroll);
+    return()=>window.removeEventListener('scroll',onScroll);
+  },[]);
+  const scrollTo=id=>document.getElementById(id)?.scrollIntoView({behavior:'smooth'});
+  const e=React.createElement;
+  return e(React.Fragment,null,
+    e('div',{className:'bg-canvas'}),
+    e('div',{className:'grid-lines'}),
+    e('nav',{className:'nav'},
+      e('div',{className:'nav-logo'},'SWASTIK'),
+      e('div',{className:'nav-links'},
+        [['hero','Home'],['interests','Interests'],['subjects','Subjects'],['school','School'],['family','Family']].map(([id,label])=>
+          e('span',{key:id,className:`nav-link ${activeSection===id?'active':''}`,onClick:()=>scrollTo(id)},label)
+        )
+      )
+    ),
+    e('section',{id:'hero',className:'hero'},
+      e('div',{className:'hero-left'},
+        e('div',{className:'hero-badge'},e('span',{className:'badge-dot'}),'Class IX · Xavier High School'),
+        e('h1',{className:'hero-title'},'SWASTIK'),
+        e('p',{className:'hero-tagline'},'Student · Explorer · Dino Enthusiast'),
+        e('p',{className:'hero-bio'},"A curious mind powered by science and pizza. I ride scooters, chase dinosaur facts, and solve maths problems — all in a day's work. Welcome to my world! 🌿"),
+        e('div',{className:'hero-chips'},
+          [['🦕','Dinosaur Fan'],['🛵','Scooter Rider'],['🍕','Pizza Lover'],['🔬','Science Geek'],['📐','Maths Wizard'],['🌏','Social Science']].map(([em,label])=>
+            e('div',{className:'hero-chip',key:label},e('span',null,em),' ',label)
+          )
+        )
+      ),
+      e('div',{className:'hero-right'},
+        e('div',{className:'profile-card'},
+          e('div',{className:'avatar-wrap'},e('div',{className:'avatar-inner'},'🧑‍🎓')),
+          e('div',{className:'profile-name'},'Swastik'),
+          e('div',{className:'profile-school'},'Xavier High School'),
+          e('div',{className:'profile-stats'},
+            [['IX','Class'],['2','Family'],['3','Fav Subj'],['∞','Energy']].map(([v,l])=>
+              e('div',{className:'pstat',key:l},e('div',{className:'pstat-val'},v),e('div',{className:'pstat-label'},l))
+            )
+          )
+        ),
+        ...[['🦕','Top Interest','Dinosaurs'],['🏫','School','Xavier High'],['🍕','Fuel','Extra Cheese Pizza']].map(([em,label,val])=>
+          e('div',{className:'mini-card',key:label},
+            e('div',{className:'mini-icon'},em),
+            e('div',null,e('div',{className:'mini-label'},label),e('div',{className:'mini-val'},val))
+          )
+        )
+      )
+    ),
+    e('div',{className:'divider'}),
+    e('section',{id:'interests',className:'section'},
+      e('div',{className:'section-inner'},
+        e('div',{className:'section-eyebrow'},'// What I Love'),
+        e('h2',{className:'section-heading'},'My Interests'),
+        e('div',{className:'glow-bar'}),
+        e('div',{className:'interests-grid'},
+          [{em:'🦕',name:'Dinosaurs',desc:'From the mighty T-Rex to the long-necked Brachiosaurus — prehistoric life is endlessly fascinating. I can name 50+ species off the top of my head!',bar:98},{em:'🛵',name:'Riding Scooters',desc:"Wind in my hair, city zooming past — there's nothing quite like the freedom of a scooter ride. It's my favourite way to unwind.",bar:90},{em:'🍕',name:'Pizza',desc:"Crispy crust, bubbling cheese, perfect toppings. Pizza is basically a love language, and I'm fluent. Every slice is a tiny celebration.",bar:95}].map(({em,name,desc,bar})=>
+            e('div',{className:'gcard int-card',key:name},
+              e('div',{className:'int-icon-wrap'},em),
+              e('div',{className:'int-name'},name),
+              e('p',{className:'int-desc'},desc),
+              e('div',null,
+                e('div',{className:'bar-head'},e('span',null,'Passion Level'),e('span',null,bar+'%')),
+                e('div',{className:'bar-track'},e('div',{className:'bar-fill',style:{width:bar+'%'}}))
+              )
+            )
+          )
+        )
+      )
+    ),
+    e('div',{className:'divider'}),
+    e('section',{id:'subjects',className:'section'},
+      e('div',{className:'section-inner'},
+        e('div',{className:'section-eyebrow'},'// What I Study'),
+        e('h2',{className:'section-heading'},'Favourite Subjects'),
+        e('div',{className:'glow-bar'}),
+        e('div',{className:'subjects-grid'},
+          [{em:'🔬',name:'Science',desc:'Experiments, discoveries, the magic of the universe. Science answers the biggest questions and sparks my imagination every day.',delay:'0s'},{em:'📐',name:'Mathematics',desc:'Numbers, patterns, elegant proofs — Maths is the secret language the universe speaks. I love cracking a tough problem.',delay:'0.4s'},{em:'🌏',name:'Social Science',desc:'History, geography, civics — understanding how human societies work and where we all came from. The story of us.',delay:'0.8s'}].map(({em,name,desc,delay})=>
+            e('div',{className:'gcard sub-card',key:name},
+              e('span',{className:'sub-emoji',style:{animationDelay:delay}},em),
+              e('div',{className:'sub-name'},name),
+              e('p',{className:'sub-desc'},desc),
+              e('div',{className:'sub-badge'},'Top Favourite'),
+              e('div',{className:'stars'},[0,1,2].map(i=>e('span',{className:'star',key:i,style:{animationDelay:i*0.3+'s'}},'★')))
+            )
+          )
+        )
+      )
+    ),
+    e('div',{className:'divider'}),
+    e('section',{id:'school',className:'section'},
+      e('div',{className:'section-inner'},
+        e('div',{className:'section-eyebrow'},'// Where I Learn'),
+        e('h2',{className:'section-heading'},'My School'),
+        e('div',{className:'glow-bar'}),
+        e('div',{className:'gcard school-banner'},
+          e('div',{className:'school-eyebrow'},'Proudly Attending'),
+          e('div',{className:'school-name-big'},'Xavier High School'),
+          e('p',{className:'school-desc'},'A place of knowledge, growth, and endless possibilities. Xavier High School is where I learn, grow, and shape my future — one class at a time.'),
+          e('div',{className:'school-pills'},
+            [['📚','Class IX'],['🎓','High School'],['🔬','Science Stream'],['📐','Math Excellence'],['🌏','Social Studies']].map(([em,label])=>
+              e('div',{className:'spill',key:label},em,' ',label)
+            )
+          )
+        )
+      )
+    ),
+    e('div',{className:'divider'}),
+    e('section',{id:'family',className:'section'},
+      e('div',{className:'section-inner'},
+        e('div',{className:'section-eyebrow'},'// My People'),
+        e('h2',{className:'section-heading'},'My Family'),
+        e('div',{className:'glow-bar'}),
+        e('div',{className:'family-center'},
+          e('div',{className:'gcard fam-card'},
+            e('span',{className:'fam-heart'},'❤️'),
+            e('div',{className:'fam-number'},'2'),
+            e('div',{className:'fam-label'},'Members Strong'),
+            e('p',{className:'fam-desc'},'Small in number, infinite in love. My family is my greatest strength — two people who make every day worth it. 💚')
+          )
+        )
+      )
+    ),
+    e('footer',{className:'footer'},
+      e('div',{className:'footer-logo'},'SWASTIK'),
+      e('div',{className:'footer-sub'},'Class IX · Xavier High School · 🦕 🛵 🍕 🔬 📐 🌏'),
+      e('div',{className:'footer-made'},'Made with 💚 and lots of pizza')
+    ),
+    e('button',{className:'dino-btn',onClick:dinoClick,title:'Click me!'},'🦕'),
+    toast&&e('div',{className:'toast'},toast)
+  );
+}
+ReactDOM.createRoot(document.getElementById('root')).render(React.createElement(App));
+</script>
+</body>
+</html>
